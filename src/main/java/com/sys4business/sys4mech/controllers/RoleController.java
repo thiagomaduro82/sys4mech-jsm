@@ -7,7 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sys4business.sys4mech.models.Role;
@@ -25,13 +27,14 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    @GetMapping
     public ResponseEntity<Page<Role>> getAllRoles(
-            Optional<String> uuid,
-            Optional<String> name,
-            Optional<Integer> pageNumber,
-            Optional<Integer> pageSize,
-            Optional<String> sort,
-            Optional<String> order) {
+            @RequestParam Optional<String> uuid,
+            @RequestParam Optional<String> name,
+            @RequestParam Optional<Integer> pageNumber,
+            @RequestParam Optional<Integer> pageSize,
+            @RequestParam Optional<String> sort,
+            @RequestParam Optional<String> order) {
 
         Sort sortRequest;
         if (sort.isPresent() && order.isPresent()) {
