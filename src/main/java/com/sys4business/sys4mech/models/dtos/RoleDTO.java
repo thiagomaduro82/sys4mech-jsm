@@ -1,7 +1,6 @@
 package com.sys4business.sys4mech.models.dtos;
 
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import com.sys4business.sys4mech.models.Role;
 
@@ -13,7 +12,6 @@ public class RoleDTO {
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
     @Length(min = 3, max = 60, message = "Name must be between 3 and 60 characters")
-    @UniqueElements(message = "Name must be unique")
     private String name;
 
     public RoleDTO() {

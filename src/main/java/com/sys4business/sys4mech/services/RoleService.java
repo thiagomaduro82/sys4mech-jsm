@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.querydsl.core.types.Predicate;
 import com.sys4business.sys4mech.exceptions.ObjectNotFoundException;
 import com.sys4business.sys4mech.models.Role;
 import com.sys4business.sys4mech.repositories.RoleRepository;
@@ -20,29 +19,33 @@ public class RoleService {
         this.roleRepository = roleRepository;
     }
 
-    public Role findByUuid(String uuid) {
+    public Role getByUuid(String uuid) {
         return roleRepository.findByUuid(uuid)
                 .orElseThrow(() -> new ObjectNotFoundException("Role not found with UUID: " + uuid));
     }
 
-    public Page<Role> findAll(Predicate predicate, Pageable pageable) {
-        return roleRepository.findAll(predicate, pageable);
+    public Page<Role> getAll(Pageable pageable) {
+        return roleRepository.findAll(pageable);
     }
 
-    public Role save(Role role) {
+    public Page<Role> searchByName(String name, Pageable pageable) {
+        return roleRepository.findAllByNameContainingIgnoreCase(name, pageable);
+    }
+
+    public Role create(Role role) {
         role.setId(null); // Ensure a new role is created
         role.setUuid(Sys4MechUtil.generateUuid());
         return roleRepository.save(role);
     }
 
     public Role update(String uuid, Role role) {
-        Role existingRole = findByUuid(uuid);
+        Role existingRole = getByUuid(uuid);
         existingRole.setName(role.getName());
         return roleRepository.save(existingRole);
     }
 
     public void deleteByUuid(String uuid) {
-        Role role = findByUuid(uuid);
+        Role role = getByUuid(uuid);
         roleRepository.delete(role);    
     }
 

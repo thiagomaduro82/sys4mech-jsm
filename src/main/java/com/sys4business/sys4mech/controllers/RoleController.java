@@ -1,25 +1,37 @@
 package com.sys4business.sys4mech.controllers;
 
+import java.net.URI;
 import java.util.Optional;
 
+import org.slf4j.Logger;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sys4business.sys4mech.models.Role;
-import com.sys4business.sys4mech.models.predicate.SetRolePredicate;
+import com.sys4business.sys4mech.models.dtos.RoleDTO;
 import com.sys4business.sys4mech.services.RoleService;
 import com.sys4business.sys4mech.utils.Constant;
 
+import jakarta.validation.Valid;
+
+@CrossOrigin
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
+
+    private final Logger log = org.slf4j.LoggerFactory.getLogger(RoleController.class);
 
     private final RoleService roleService;
 
@@ -29,23 +41,25 @@ public class RoleController {
 
     @GetMapping
     public ResponseEntity<Page<Role>> getAllRoles(
-            @RequestParam Optional<String> uuid,
             @RequestParam Optional<String> name,
             @RequestParam Optional<Integer> pageNumber,
             @RequestParam Optional<Integer> pageSize,
-            @RequestParam Optional<String> sort,
             @RequestParam Optional<String> order) {
 
+        log.info("Fetching roles with parameters: name={}, pageNumber={}, pageSize={}, order={}",
+                name.orElse(""), pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE), order.orElse("asc"));
+
         Sort sortRequest;
-        if (sort.isPresent() && order.isPresent()) {
+        if (order.isPresent()) {
             if (order.get().equalsIgnoreCase("asc")) {
-                sortRequest = Sort.by(sort.get()).ascending();
+                sortRequest = Sort.by("name").ascending();
             } else {
-                sortRequest = Sort.by(sort.get()).descending();
+                sortRequest = Sort.by("name").descending();
             }
         } else {
-            sortRequest = Sort.unsorted();
+            sortRequest = Sort.by("name").ascending();
         }
+
         // Set up pageable variable
         Pageable pageable;
         if (pageNumber.isPresent() && pageSize.isPresent()) {
@@ -53,13 +67,33 @@ public class RoleController {
         } else {
             pageable = PageRequest.of(Constant.INITIAL_PAGE, Constant.PAGE_SIZE, sortRequest);
         }
-        // Set the predicate
-        SetRolePredicate setRolePredicate = SetRolePredicate.builder()
-                .uuid(uuid)
-                .name(name)
-                .build();
-        // Implementation will go here
-        return ResponseEntity.ok(roleService.findAll(setRolePredicate.toPredicate(), pageable));
+
+        if (name.isPresent()) {
+            return ResponseEntity.ok(roleService.searchByName(name.get(), pageable));
+        }
+        return ResponseEntity.ok(roleService.getAll(pageable));
+    }
+
+    @PostMapping
+    public ResponseEntity<Role> createRole(@Valid @RequestBody RoleDTO roleDTO) {
+        log.info("Creating role with details: {}", roleDTO);
+        Role createdRole = roleService.create(roleDTO.toRole());
+        URI location = URI.create("/api/roles/" + createdRole.getUuid());
+        return ResponseEntity.created(location).body(createdRole);
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<Role> updateRole(@RequestParam String uuid, @Valid @RequestBody RoleDTO roleDTO) {
+        log.info("Updating role with UUID: {} and details: {}", uuid, roleDTO);
+        Role updatedRole = roleService.update(uuid, roleDTO.toRole());
+        return ResponseEntity.ok(updatedRole);
+    }
+
+    @DeleteMapping("/{uuid}")
+    public ResponseEntity<Void> deleteRole(@RequestParam String uuid) {
+        log.info("Deleting role with UUID: {}", uuid);
+        roleService.deleteByUuid(uuid);
+        return ResponseEntity.noContent().build();
     }
 
 }
