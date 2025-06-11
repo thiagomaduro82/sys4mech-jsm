@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +40,13 @@ public class RoleController {
         this.roleService = roleService;
     }
 
+    @GetMapping("/{uuid}")
+    public ResponseEntity<Role> getRoleByUuid(@RequestParam String uuid) {
+        log.info("Fetching role with UUID: {}", uuid);
+        Role role = roleService.getByUuid(uuid);
+        return ResponseEntity.ok(role);
+    }
+
     @GetMapping
     public ResponseEntity<Page<Role>> getAllRoles(
             @RequestParam Optional<String> name,
@@ -47,7 +55,8 @@ public class RoleController {
             @RequestParam Optional<String> order) {
 
         log.info("Fetching roles with parameters: name={}, pageNumber={}, pageSize={}, order={}",
-                name.orElse(""), pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE), order.orElse("asc"));
+                name.orElse(""), pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE),
+                order.orElse("asc"));
 
         Sort sortRequest;
         if (order.isPresent()) {
@@ -90,7 +99,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteRole(@RequestParam String uuid) {
+    public ResponseEntity<Void> deleteRole(@PathVariable String uuid) {
         log.info("Deleting role with UUID: {}", uuid);
         roleService.deleteByUuid(uuid);
         return ResponseEntity.noContent().build();
