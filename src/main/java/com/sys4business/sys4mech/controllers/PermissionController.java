@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,6 +27,7 @@ import com.sys4business.sys4mech.utils.Constant;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {
@@ -39,7 +41,7 @@ public class PermissionController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Permission> getPermissionByUuid(@RequestParam String uuid) {
+    public ResponseEntity<Permission> getPermissionByUuid(@PathVariable String uuid) {
         log.info("Fetching permission with UUID: {}", uuid);
         Permission permission = permissionService.getByUuid(uuid);
         return ResponseEntity.ok(permission);
@@ -94,7 +96,7 @@ public class PermissionController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Permission> updatePermission(@RequestParam String uuid, @Valid @RequestBody PermissionDTO permissionDTO) {
+    public ResponseEntity<Permission> updatePermission(@PathVariable String uuid, @Valid @RequestBody PermissionDTO permissionDTO) {
         log.info("Updating permission with UUID: {} and details: {}", uuid, permissionDTO);
         Permission updatedPermission = permissionService.update(uuid, permissionDTO.toPermission());
         return ResponseEntity.ok(updatedPermission);
