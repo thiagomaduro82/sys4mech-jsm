@@ -20,7 +20,7 @@ public class Role extends BaseEntity{
     @Column(name = "name")
     private String name;
     @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(name = "role_permissions",
+    @JoinTable(name = "roles_permissions",
                joinColumns = {@JoinColumn(name = "role_id")},
                inverseJoinColumns = {@JoinColumn(name = "permission_id")})
     private Set<Permission> permissions = new HashSet<>();

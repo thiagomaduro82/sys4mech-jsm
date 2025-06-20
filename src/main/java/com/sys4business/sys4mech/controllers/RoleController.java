@@ -41,7 +41,7 @@ public class RoleController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Role> getRoleByUuid(@RequestParam String uuid) {
+    public ResponseEntity<Role> getRoleByUuid(@PathVariable String uuid) {
         log.info("Fetching role with UUID: {}", uuid);
         Role role = roleService.getByUuid(uuid);
         return ResponseEntity.ok(role);
@@ -92,7 +92,7 @@ public class RoleController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Role> updateRole(@RequestParam String uuid, @Valid @RequestBody RoleDTO roleDTO) {
+    public ResponseEntity<Role> updateRole(@PathVariable String uuid, @Valid @RequestBody RoleDTO roleDTO) {
         log.info("Updating role with UUID: {} and details: {}", uuid, roleDTO);
         Role updatedRole = roleService.update(uuid, roleDTO.toRole());
         return ResponseEntity.ok(updatedRole);

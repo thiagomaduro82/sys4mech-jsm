@@ -18,10 +18,10 @@ create table permissions (
 ) ENGINE = innoDB default charset = utf8mb4;
 
 -- Create the roles_permissions table
-create table roles_permissions (
+create table role_permissions (
+    id bigint unsigned not null auto_increment primary key,
     role_id bigint unsigned not null,
     permission_id bigint unsigned not null,
-    primary key (role_id, permission_id),
     foreign key (role_id) references roles(id) on delete cascade,
     foreign key (permission_id) references permissions(id)
 ) ENGINE = innoDB default charset = utf8mb4;

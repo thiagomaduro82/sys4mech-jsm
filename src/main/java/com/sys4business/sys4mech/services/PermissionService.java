@@ -1,5 +1,7 @@
 package com.sys4business.sys4mech.services;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,10 @@ public class PermissionService {
 
     public Page<Permission> findAll(Pageable pageable) {
         return permissionRepository.findAll(pageable);
+    }
+
+    public List<Permission> findAllList() {
+        return permissionRepository.findAll();
     }
 
     public Page<Permission> searchByName(String name, Pageable pageable) {

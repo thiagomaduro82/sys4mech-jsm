@@ -1,6 +1,7 @@
 package com.sys4business.sys4mech.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -85,6 +86,13 @@ public class PermissionController {
             return ResponseEntity.ok(permissionService.searchByDescription(value.get(), pageable));
         }
         return ResponseEntity.ok(permissionService.findAll(pageable));
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Permission>> getAllPermissionsList() {
+        log.info("Fetching all permissions as a list");
+        List<Permission> permissions = permissionService.findAllList();
+        return ResponseEntity.ok(permissions);
     }
 
     @PostMapping
