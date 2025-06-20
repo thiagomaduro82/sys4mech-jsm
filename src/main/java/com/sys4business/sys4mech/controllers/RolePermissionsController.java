@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sys4business.sys4mech.models.Role;
 import com.sys4business.sys4mech.models.RolePermissions;
-import com.sys4business.sys4mech.models.dtos.RolePermissionsDTO;
 import com.sys4business.sys4mech.services.RolePermissionsService;
 
 import jakarta.validation.Valid;
@@ -32,16 +30,18 @@ public class RolePermissionsController {
     }
 
     @PostMapping
-    public ResponseEntity<RolePermissions> createRolePermission(@Valid @RequestBody RolePermissionsDTO rolePermissionsDTO) {
-        log.info("Creating role with details: {}", rolePermissionsDTO);
-        return ResponseEntity.ok().body(rolePermissionsService.create(rolePermissionsDTO.toRolePermissions()));
+    public ResponseEntity<RolePermissions> createRolePermission(@Valid @RequestBody RolePermissions rolePermissions) {
+        log.info("Creating role with details: {}", rolePermissions);
+        return ResponseEntity.ok().body(rolePermissionsService.create(rolePermissions));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRolePermission(@PathVariable("id") Long id) {
-        RolePermissions rolePermissions = rolePermissionsService.getById(id);
+    @DeleteMapping("/role/{roleId}/permission/{permissionId}")
+    public ResponseEntity<Void> deleteRolePermission(
+            @PathVariable Long roleId,
+            @PathVariable Long permissionId) {
+        RolePermissions rolePermissions = rolePermissionsService.getByRoleIdAndPermissionId(roleId, permissionId);
         log.info("Deleting permission: {}", rolePermissions);
-        rolePermissionsService.delete(rolePermissions.getId());
+        rolePermissionsService.delete(rolePermissions);
         return ResponseEntity.noContent().build();
     }
 

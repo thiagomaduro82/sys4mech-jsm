@@ -15,18 +15,16 @@ public class RolePermissionsService {
         this.rolePermissionsRepository = rolePermissionsRepository;
     }
 
-    public RolePermissions getById(Long id) {
+    public RolePermissions getByRoleIdAndPermissionId(Long roleId, Long permissionId) {
         return rolePermissionsRepository
-                .findById(id).orElseThrow(() -> new ObjectNotFoundException("Role Permission not found - ID: " + id));
+                .findByRoleIdAndPermissionId(roleId, permissionId).orElseThrow(() -> new ObjectNotFoundException("Role Permission not found"));
     }
 
     public RolePermissions create(RolePermissions rolePermission) {
-        rolePermission.setId(null);
         return rolePermissionsRepository.save(rolePermission);
     }
 
-    public void delete(Long id) {
-        RolePermissions rolePermissions = getById(id);
+    public void delete(RolePermissions rolePermissions) {
         rolePermissionsRepository.delete(rolePermissions);
     }
 
