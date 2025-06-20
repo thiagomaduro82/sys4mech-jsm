@@ -1,7 +1,13 @@
 package com.sys4business.sys4mech.models;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,14 +20,18 @@ public class Permission extends BaseEntity {
     private String name;
     @Column(name = "description")
     private String description;
+    @ManyToMany(mappedBy = "permissions")
+    @JsonIgnore
+    private Set<Role> roles = new HashSet<>();
 
     public Permission() {
         super();
     }
 
-    public Permission(String name, String description) {
+    public Permission(String name, String description, Set<Role> roles) {
         this.name = name;
         this.description = description;
+        this.roles = roles;
     }
 
     public String getUuid() {
@@ -47,4 +57,13 @@ public class Permission extends BaseEntity {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+    
 }
