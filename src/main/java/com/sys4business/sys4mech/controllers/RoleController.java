@@ -27,7 +27,6 @@ import com.sys4business.sys4mech.utils.Constant;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {

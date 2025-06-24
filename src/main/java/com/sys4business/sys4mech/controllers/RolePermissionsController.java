@@ -16,7 +16,6 @@ import com.sys4business.sys4mech.services.RolePermissionsService;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/role-permissions")
 public class RolePermissionsController {

@@ -28,7 +28,6 @@ import com.sys4business.sys4mech.utils.Constant;
 
 import jakarta.validation.Valid;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/permissions")
 public class PermissionController {
