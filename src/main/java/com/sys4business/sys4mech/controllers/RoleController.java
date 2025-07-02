@@ -1,6 +1,7 @@
 package com.sys4business.sys4mech.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -43,6 +44,13 @@ public class RoleController {
         log.info("Fetching role with UUID: {}", uuid);
         Role role = roleService.getByUuid(uuid);
         return ResponseEntity.ok(role);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<Role>> getAllRolesList() {
+        log.info("Fetching all roles as a list");
+        List<Role> roles = roleService.getAllList();
+        return ResponseEntity.ok(roles);
     }
 
     @GetMapping

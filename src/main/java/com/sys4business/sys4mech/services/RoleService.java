@@ -1,6 +1,8 @@
 package com.sys4business.sys4mech.services;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,10 @@ public class RoleService {
 
     public Page<Role> getAll(Pageable pageable) {
         return roleRepository.findAll(pageable);
+    }
+
+    public List<Role> getAllList() {
+        return roleRepository.findAll();
     }
 
     public Page<Role> searchByName(String name, Pageable pageable) {

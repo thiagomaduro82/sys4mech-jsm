@@ -2,6 +2,7 @@ package com.sys4business.sys4mech.services;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -27,8 +28,22 @@ public class UserService {
         .orElseThrow(() -> new ObjectNotFoundException("User not found - UUID: " + uuid));
   }
 
-  public List<User> getAllUsers(Pageable pageable) {
-    return userRepository.findAll(pageable).toList();
+  public Page<User> getAllUsers(Pageable pageable) {
+    return userRepository.findAll(pageable);
+  }
+
+  public Page<User> searchByName(String name, Pageable pageable) {
+    if (name == null || name.isEmpty()) {
+      return userRepository.findAll(pageable);
+    }
+    return userRepository.findByNameContainingIgnoreCase(name, pageable);
+  }
+
+  public Page<User> searchByEmail(String email, Pageable pageable) {
+    if (email == null || email.isEmpty()) {
+      return userRepository.findAll(pageable);
+    }
+    return userRepository.findByEmailContainingIgnoreCase(email, pageable);
   }
 
   public User create(User user) {
@@ -38,7 +53,10 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public User update(User user) {
+  public User update(String uuid, User user) {
+    User existingUser = getByUuid(uuid);
+    existingUser.setName(user.getName());
+    existingUser.setEmail(user.getEmail());
     return userRepository.save(user);
   }
 
