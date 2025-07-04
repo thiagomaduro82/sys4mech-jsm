@@ -11,18 +11,23 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sys4business.sys4mech.models.User;
+import com.sys4business.sys4mech.models.dtos.ChangePassword;
 import com.sys4business.sys4mech.models.dtos.UserAddDTO;
 import com.sys4business.sys4mech.models.dtos.UserUpdDTO;
 import com.sys4business.sys4mech.services.RoleService;
 import com.sys4business.sys4mech.services.UserService;
 import com.sys4business.sys4mech.utils.Constant;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/users")
@@ -39,7 +44,7 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<User> getUserByUuid(String uuid) {
+    public ResponseEntity<User> getUserByUuid(@PathVariable String uuid) {
         log.info("Fetching user with UUID: {}", uuid);
         User user = userService.getByUuid(uuid);
         return ResponseEntity.ok(user);
@@ -53,7 +58,7 @@ public class UserController {
             @RequestParam Optional<Integer> pageSize,
             @RequestParam Optional<String> order) {
 
-        log.info("Fetching permissions with parameters: field={}, value={}, pageNumber={}, pageSize={}, order={}",
+        log.info("Fetching users with parameters: field={}, value={}, pageNumber={}, pageSize={}, order={}",
                 field.orElse(""), value.orElse(""), pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE),
                 order.orElse("asc"));
 
@@ -86,7 +91,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<User> createUser(UserAddDTO userAddDTO) {
+    public ResponseEntity<User> createUser(@Valid @RequestBody UserAddDTO userAddDTO) {
         log.info("Creating user: {}", userAddDTO.getName());
         User user = userService.create(convertAddToUser(userAddDTO));
         URI location = URI.create("/api/users/" + user.getUuid());
@@ -94,10 +99,17 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<User> updateUser(String uuid, UserUpdDTO userUpdDTO) {
+    public ResponseEntity<User> updateUser(@PathVariable String uuid, @Valid @RequestBody UserUpdDTO userUpdDTO) {
         log.info("Updating user with UUID: {}", uuid);
         User updatedUser = convertUpdateToUser(userUpdDTO);
         User user = userService.update(uuid, updatedUser);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/{uuid}/change-password")
+    public ResponseEntity<User> changePassword(@PathVariable String uuid, @Valid @RequestBody ChangePassword changePassword) {
+        log.info("Changing password for user with UUID: {}", uuid);
+        User user = userService.changePassword(uuid, changePassword);
         return ResponseEntity.ok(user);
     }
 

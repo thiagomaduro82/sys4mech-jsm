@@ -1,7 +1,5 @@
 package com.sys4business.sys4mech.services;
 
-import java.util.List;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -9,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.sys4business.sys4mech.exceptions.ObjectNotFoundException;
 import com.sys4business.sys4mech.models.User;
+import com.sys4business.sys4mech.models.dtos.ChangePassword;
 import com.sys4business.sys4mech.repositories.UserRepository;
 import com.sys4business.sys4mech.utils.Sys4MechUtil;
 
@@ -57,12 +56,19 @@ public class UserService {
     User existingUser = getByUuid(uuid);
     existingUser.setName(user.getName());
     existingUser.setEmail(user.getEmail());
-    return userRepository.save(user);
+    existingUser.setRole(user.getRole());
+    return userRepository.save(existingUser);
   }
 
   public void delete(String uuid) {
     User user = getByUuid(uuid);
     userRepository.delete(user);
+  }
+
+  public User changePassword(String uuid, ChangePassword changePassword) {
+    User user = getByUuid(uuid);
+    user.setPassword(passwordEncoder.encode(changePassword.getNewPassword()));
+    return userRepository.save(user);
   }
     
 }
