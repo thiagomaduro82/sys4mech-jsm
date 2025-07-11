@@ -29,7 +29,7 @@ public class EmployeeService {
     }
 
     public List<Employee> findAllEmployees() {
-        return employeeRepository.findAllOrderByNameAsc();
+        return employeeRepository.findAllByOrderByNameAsc();
     }
     
     public Employee create(Employee employee) {
