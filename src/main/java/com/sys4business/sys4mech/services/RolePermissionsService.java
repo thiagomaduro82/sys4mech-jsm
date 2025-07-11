@@ -25,6 +25,12 @@ public class RolePermissionsService {
         return rolePermissionsRepository.save(rolePermission);
     }
 
+    public RolePermissions getByRoleIdAndPermissionId(Long roleId, Long permissionId) {
+        return rolePermissionsRepository
+                .findByRoleIdAndPermissionId(roleId, permissionId)
+                .orElseThrow(() -> new ObjectNotFoundException("Role Permission not found for roleId: " + roleId + " and permissionId: " + permissionId));
+    }
+
     public void delete(RolePermissions rolePermissions) {
         rolePermissionsRepository.delete(rolePermissions);
     }

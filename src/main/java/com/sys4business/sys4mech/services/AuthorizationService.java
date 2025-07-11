@@ -2,9 +2,9 @@ package com.sys4business.sys4mech.services;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.sys4business.sys4mech.exceptions.ObjectNotFoundException;
 import com.sys4business.sys4mech.repositories.UserRepository;
 
 @Service
@@ -17,8 +17,9 @@ public class AuthorizationService implements UserDetailsService {
   }
 
   @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    return userRepository.findByEmail(username);
+  public UserDetails loadUserByUsername(String username) {
+    return userRepository.findByEmail(username).orElseThrow(() -> 
+        new ObjectNotFoundException("User not found with email: " + username));
   }
     
 }
