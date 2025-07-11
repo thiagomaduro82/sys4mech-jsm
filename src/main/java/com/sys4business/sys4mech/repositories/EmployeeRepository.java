@@ -14,6 +14,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>, Query
 
     Optional<Employee> findByUuid(String uuid);
 
-    List<Employee> findAllOrderByNameAsc();
+    List<Employee> findAllByOrderByNameAsc();
     
 }
