@@ -20,10 +20,11 @@ public class SetEmployeePredicate {
 
     public BooleanBuilder toPredicate() {
         QEmployee qEmployee = QEmployee.employee;
-        name.ifPresent(val -> qEmployee.name.like("%" + val + "%"));
-        email.ifPresent(val -> qEmployee.email.like("%" + val + "%"));
-        city.ifPresent(val -> qEmployee.city.like("%" + val + "%"));
         BooleanBuilder booleanBuilder = new BooleanBuilder();
+        // Apply filters if present
+        name.ifPresent(val -> booleanBuilder.and(qEmployee.name.containsIgnoreCase(val)));
+        email.ifPresent(val -> booleanBuilder.and(qEmployee.email.containsIgnoreCase(val)));
+        city.ifPresent(val -> booleanBuilder.and(qEmployee.city.containsIgnoreCase(val)));
         return booleanBuilder;
     }
     

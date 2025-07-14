@@ -55,6 +55,11 @@ public class EmployeeController {
             @RequestParam Optional<Integer> pageSize,
             @RequestParam Optional<String> order) {
 
+        log.info(
+                "Fetching employees with filters - Name: {}, Email: {}, City: {}, Page Number: {}, Page Size: {}, Order: {}",
+                name.orElse("N/A"), email.orElse("N/A"), city.orElse("N/A"),
+                pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE),
+                order.orElse("asc"));
         Sort sortRequest;
         if (order.isPresent()) {
             if (order.get().equalsIgnoreCase("asc")) {
@@ -79,7 +84,7 @@ public class EmployeeController {
                 .email(email)
                 .city(city)
                 .build();
-        
+
         return ResponseEntity.ok(employeeService.findAllEmployees(predicate.toPredicate(), pageable));
     }
 
@@ -99,7 +104,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable String uuid, @Valid @RequestBody EmployeeDTO employeeDTO) {
+    public ResponseEntity<Employee> updateEmployee(@PathVariable String uuid,
+            @Valid @RequestBody EmployeeDTO employeeDTO) {
         log.info("Updating employee with UUID: {} and details: {}", uuid, employeeDTO);
         Employee updatedEmployee = employeeService.update(uuid, employeeDTO.toEmployee());
         return ResponseEntity.ok(updatedEmployee);
@@ -111,5 +117,5 @@ public class EmployeeController {
         employeeService.delete(uuid);
         return ResponseEntity.noContent().build();
     }
-    
+
 }
