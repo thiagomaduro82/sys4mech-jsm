@@ -22,32 +22,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sys4business.sys4mech.models.Employee;
-import com.sys4business.sys4mech.models.dtos.EmployeeDTO;
-import com.sys4business.sys4mech.models.predicate.SetEmployeePredicate;
-import com.sys4business.sys4mech.services.EmployeeService;
+import com.sys4business.sys4mech.models.Customer;
+import com.sys4business.sys4mech.models.dtos.CustomerDTO;
+import com.sys4business.sys4mech.models.predicate.SetCustomerPredicate;
+import com.sys4business.sys4mech.services.CustomerService;
 import com.sys4business.sys4mech.utils.Constant;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/api/employees")
-public class EmployeeController {
+@RequestMapping("/api/customers")
+public class CustomerController {
 
-    private final Logger log = LoggerFactory.getLogger(EmployeeController.class);
+    private final Logger log = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
-    private EmployeeService employeeService;
+    private CustomerService customerService;
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Employee> getEmployeeByUuid(@PathVariable String uuid) {
-        log.info("Fetching employee with UUID: {}", uuid);
-        Employee employee = employeeService.findEmployeeByUuid(uuid);
-        return ResponseEntity.ok(employee);
+    public ResponseEntity<Customer> getCustomerByUuid(@PathVariable String uuid) {
+        log.info("Fetching customer with UUID: {}", uuid);
+        Customer customer = customerService.findCustomerByUuid(uuid);
+        return ResponseEntity.ok(customer);
     }
 
     @GetMapping
-    public ResponseEntity<Page<Employee>> getAllEmployees(
+    public ResponseEntity<Page<Customer>> getAllCustomers(
             @RequestParam Optional<String> name,
             @RequestParam Optional<String> email,
             @RequestParam Optional<String> city,
@@ -56,7 +56,7 @@ public class EmployeeController {
             @RequestParam Optional<String> order) {
 
         log.info(
-                "Fetching employees with filters - Name: {}, Email: {}, City: {}, Page Number: {}, Page Size: {}, Order: {}",
+                "Fetching customers with filters - Name: {}, Email: {}, City: {}, Page Number: {}, Page Size: {}, Order: {}",
                 name.orElse("N/A"), email.orElse("N/A"), city.orElse("N/A"),
                 pageNumber.orElse(Constant.INITIAL_PAGE), pageSize.orElse(Constant.PAGE_SIZE),
                 order.orElse("asc"));
@@ -79,43 +79,43 @@ public class EmployeeController {
             pageable = PageRequest.of(Constant.INITIAL_PAGE, Constant.PAGE_SIZE, sortRequest);
         }
 
-        SetEmployeePredicate predicate = SetEmployeePredicate.builder()
+        SetCustomerPredicate predicate = SetCustomerPredicate.builder()
                 .name(name)
                 .email(email)
                 .city(city)
                 .build();
 
-        return ResponseEntity.ok(employeeService.findAllEmployees(predicate.toPredicate(), pageable));
+        return ResponseEntity.ok(customerService.findAllCustomers(predicate.toPredicate(), pageable));
     }
 
     @GetMapping("/list")
-    public ResponseEntity<List<Employee>> getAllEmployeeList() {
-        log.info("Fetching all employees as a list");
-        List<Employee> employees = employeeService.findAllEmployees();
-        return ResponseEntity.ok(employees);
+    public ResponseEntity<List<Customer>> getAllCustomerList() {
+        log.info("Fetching all customers as a list");
+        List<Customer> customers = customerService.findAllCustomers();
+        return ResponseEntity.ok(customers);
     }
 
     @PostMapping
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
-        log.info("Creating employee with details: {}", employeeDTO);
-        Employee createdEmployee = employeeService.create(employeeDTO.toEmployee());
-        URI location = URI.create("/api/employees/" + createdEmployee.getUuid());
-        return ResponseEntity.created(location).body(createdEmployee);
+    public ResponseEntity<Customer> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
+        log.info("Creating customer with details: {}", customerDTO);
+        Customer createdCustomer = customerService.create(customerDTO.toCustomer());
+        URI location = URI.create("/api/customers/" + createdCustomer.getUuid());
+        return ResponseEntity.created(location).body(createdCustomer);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<Employee> updateEmployee(@PathVariable String uuid,
-            @Valid @RequestBody EmployeeDTO employeeDTO) {
-        log.info("Updating employee with UUID: {} and details: {}", uuid, employeeDTO);
-        Employee updatedEmployee = employeeService.update(uuid, employeeDTO.toEmployee());
-        return ResponseEntity.ok(updatedEmployee);
+    public ResponseEntity<Customer> updateCustomer(@PathVariable String uuid,
+            @Valid @RequestBody CustomerDTO customerDTO) {
+        log.info("Updating customer with UUID: {} and details: {}", uuid, customerDTO);
+        Customer updatedCustomer = customerService.update(uuid, customerDTO.toCustomer());
+        return ResponseEntity.ok(updatedCustomer);
     }
 
     @DeleteMapping("/{uuid}")
-    public ResponseEntity<Void> deleteEmployee(@PathVariable String uuid) {
-        log.info("Deleting employee with UUID: {}", uuid);
-        employeeService.delete(uuid);
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String uuid) {
+        log.info("Deleting customer with UUID: {}", uuid);
+        customerService.delete(uuid);
         return ResponseEntity.noContent().build();
     }
-
+    
 }

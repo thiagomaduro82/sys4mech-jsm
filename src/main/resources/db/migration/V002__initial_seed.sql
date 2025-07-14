@@ -16,7 +16,10 @@ insert into permissions (uuid, name, description, created_at, updated_at) values
   (REPLACE(UUID(), '-', ''), 'USER_DELETE', 'Delete the roles data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'EMPLOYEE_READ', 'View the employees data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'EMPLOYEE_WRITE', 'Write the employees data', now(), now()),
-  (REPLACE(UUID(), '-', ''), 'EMPLOYEE_DELETE', 'Delete the employees data', now(), now());
+  (REPLACE(UUID(), '-', ''), 'EMPLOYEE_DELETE', 'Delete the employees data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_READ', 'View the customers data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_WRITE', 'Write the customers data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_DELETE', 'Delete the customers data', now(), now());
 
 -- Role-Permission mapping
 insert into role_permissions (role_id, permission_id) values
@@ -31,4 +34,7 @@ insert into role_permissions (role_id, permission_id) values
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'USER_DELETE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'EMPLOYEE_READ')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'EMPLOYEE_WRITE')),
-  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'EMPLOYEE_DELETE'));
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'EMPLOYEE_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_DELETE'));
