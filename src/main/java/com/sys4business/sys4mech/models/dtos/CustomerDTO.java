@@ -67,8 +67,18 @@ public class CustomerDTO {
     private String phone;
 
     public Customer toCustomer() {
-        return new Customer(null, this.name, this.email, this.addressLine1, this.addressLine2,
-                this.city, this.county, this.postalCode, this.country, this.dateOfBirth, this.phone);
+        Customer customer = new Customer();
+        customer.setName(this.name);
+        customer.setEmail(this.email);
+        customer.setAddressLine1(this.addressLine1);
+        customer.setAddressLine2(this.addressLine2);
+        customer.setCity(this.city);
+        customer.setCounty(this.county);
+        customer.setPostalCode(this.postalCode);
+        customer.setCountry(this.country);
+        customer.setDateOfBirth(this.dateOfBirth);
+        customer.setPhone(this.phone);
+        return customer;
     }
 
 }

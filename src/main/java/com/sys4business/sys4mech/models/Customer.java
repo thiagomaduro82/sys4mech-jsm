@@ -1,9 +1,12 @@
 package com.sys4business.sys4mech.models;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -32,14 +35,16 @@ public class Customer extends BaseEntity {
     private LocalDate dateOfBirth;
     @Column(name = "phone", nullable = false)
     private String phone;
+    @OneToMany(mappedBy = "customer")
+    private List<CustomerCars> cars = new ArrayList<>();
 
     public Customer() {
         super();
     }
-    
+
     public Customer(String uuid, String name, String email, String addressLine1, String addressLine2,
-                    String city, String county, String postalCode, String country, LocalDate dateOfBirth,
-                    String phone) {
+            String city, String county, String postalCode, String country, LocalDate dateOfBirth,
+            String phone, List<CustomerCars> cars) {
         this.uuid = uuid;
         this.name = name;
         this.email = email;
@@ -51,6 +56,7 @@ public class Customer extends BaseEntity {
         this.country = country;
         this.dateOfBirth = dateOfBirth;
         this.phone = phone;
+        this.cars = cars;
     }
 
     public String getUuid() {
@@ -141,5 +147,12 @@ public class Customer extends BaseEntity {
         this.phone = phone;
     }
 
-    
+    public List<CustomerCars> getCars() {
+        return cars;
+    }
+
+    public void setCars(List<CustomerCars> cars) {
+        this.cars = cars;
+    }
+
 }

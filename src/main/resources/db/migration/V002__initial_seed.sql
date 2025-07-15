@@ -20,6 +20,24 @@ insert into permissions (uuid, name, description, created_at, updated_at) values
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_READ', 'View the customers data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_WRITE', 'Write the customers data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_DELETE', 'Delete the customers data', now(), now());
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_READ', 'View the customer cars data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_WRITE', 'Write the customer cars data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_DELETE', 'Delete the customer cars data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PHOTOS_READ', 'View the car photos data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PHOTOS_WRITE', 'Write the car photos data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PHOTOS_DELETE', 'Delete the car photos data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_READ', 'View the services data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_WRITE', 'Write the services data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_DELETE', 'Delete the services data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SUPPLIER_READ', 'View the suppliers data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SUPPLIER_WRITE', 'Write the suppliers data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SUPPLIER_DELETE', 'Delete the suppliers data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PARTS_READ', 'View the car parts data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PARTS_WRITE', 'Write the car parts data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'CAR_PARTS_DELETE', 'Delete the car parts data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_ORDERS_READ', 'View the service orders data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_ORDERS_WRITE', 'Write the service orders data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'SERVICE_ORDERS_DELETE', 'Delete the service orders data', now(), now());
 
 -- Role-Permission mapping
 insert into role_permissions (role_id, permission_id) values
@@ -37,4 +55,22 @@ insert into role_permissions (role_id, permission_id) values
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'EMPLOYEE_DELETE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_READ')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_WRITE')),
-  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_DELETE'));
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_CARS_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_CARS_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CUSTOMER_CARS_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PHOTOS_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PHOTOS_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PHOTOS_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SUPPLIER_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SUPPLIER_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SUPPLIER_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PARTS_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PARTS_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'CAR_PARTS_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_ORDERS_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_ORDERS_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'SERVICE_ORDERS_DELETE'));
