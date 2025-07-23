@@ -19,7 +19,7 @@ insert into permissions (uuid, name, description, created_at, updated_at) values
   (REPLACE(UUID(), '-', ''), 'EMPLOYEE_DELETE', 'Delete the employees data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_READ', 'View the customers data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_WRITE', 'Write the customers data', now(), now()),
-  (REPLACE(UUID(), '-', ''), 'CUSTOMER_DELETE', 'Delete the customers data', now(), now());
+  (REPLACE(UUID(), '-', ''), 'CUSTOMER_DELETE', 'Delete the customers data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_READ', 'View the customer cars data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_WRITE', 'Write the customer cars data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'CUSTOMER_CARS_DELETE', 'Delete the customer cars data', now(), now()),

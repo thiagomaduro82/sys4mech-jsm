@@ -1,10 +1,8 @@
 package com.sys4business.sys4mech.models.dtos;
 
 import org.hibernate.validator.constraints.Length;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import com.sys4business.sys4mech.models.CustomerCars;
-import com.sys4business.sys4mech.services.CustomerService;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -20,33 +18,27 @@ import lombok.Setter;
 @Setter
 public class CustomerCarsDTO {
 
-    @Autowired
-    private CustomerService customerService;
-
     @NotNull
     @NotBlank
     @NotEmpty
-    @Length(min = 5, max = 100)
+    @Length(max = 100)
     private String make;
     @NotNull
     @NotBlank
     @NotEmpty
-    @Length(min = 5, max = 100)
+    @Length(max = 100)
     private String model;
-    @NotNull
-    @NotBlank
-    @NotEmpty
     private Integer year;
     @NotNull
     @NotBlank
     @NotEmpty
-    @Length(min = 3, max = 30)
+    @Length(max = 30)
     private String color;
     @NotNull
     @NotBlank
     @NotEmpty
     @Length(max = 20)
-    private String registration_number;
+    private String registrationNumber;
     @NotNull
     @NotBlank
     @NotEmpty
@@ -63,9 +55,8 @@ public class CustomerCarsDTO {
         customerCar.setModel(this.model);
         customerCar.setYear(this.year);
         customerCar.setColor(this.color);
-        customerCar.setRegistrationNumber(this.registration_number);
+        customerCar.setRegistrationNumber(this.registrationNumber);
         customerCar.setVin(this.vin);
-        customerCar.setCustomer(customerService.findCustomerByUuid(customerUuid));
         return customerCar;
     }
 

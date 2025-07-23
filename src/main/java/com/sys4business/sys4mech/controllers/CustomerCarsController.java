@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sys4business.sys4mech.models.CustomerCars;
 import com.sys4business.sys4mech.models.dtos.CustomerCarsDTO;
 import com.sys4business.sys4mech.services.CustomerCarsService;
+import com.sys4business.sys4mech.services.CustomerService;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +31,9 @@ public class CustomerCarsController {
 
     @Autowired
     private CustomerCarsService customerCarsService;
+
+    @Autowired
+    private CustomerService customerService;
 
     @GetMapping("/{uuid}")
     public ResponseEntity<CustomerCars> getCustomerCarByUuid(@PathVariable String uuid) {
@@ -48,15 +52,19 @@ public class CustomerCarsController {
     @PostMapping
     public ResponseEntity<CustomerCars> createCustomerCar(@Valid @RequestBody CustomerCarsDTO customerCarDTO) {
         log.info("Creating new customer car");
-        CustomerCars createdCustomerCar = customerCarsService.create(customerCarDTO.toCustomerCars());
+        CustomerCars createdCustomerCar = customerCarDTO.toCustomerCars();
+        createdCustomerCar.setCustomer(customerService.findCustomerByUuid(customerCarDTO.getCustomerUuid()));
+        createdCustomerCar = customerCarsService.create(createdCustomerCar);
         URI location = URI.create("/api/customer-cars/" + createdCustomerCar.getUuid());
         return ResponseEntity.created(location).body(createdCustomerCar);
     }
 
     @PutMapping("/{uuid}")
-    public ResponseEntity<CustomerCars> updateCustomerCar(String uuid, @Valid @RequestBody CustomerCarsDTO customerCarDTO) {
+    public ResponseEntity<CustomerCars> updateCustomerCar(@PathVariable String uuid, @Valid @RequestBody CustomerCarsDTO customerCarDTO) {
         log.info("Updating customer car with UUID: {}", uuid);
-        CustomerCars updatedCustomerCar = customerCarsService.update(uuid, customerCarDTO.toCustomerCars());
+        CustomerCars existingCustomerCar = customerCarDTO.toCustomerCars();
+        existingCustomerCar.setCustomer(customerService.findCustomerByUuid(customerCarDTO.getCustomerUuid()));
+        CustomerCars updatedCustomerCar = customerCarsService.update(uuid, existingCustomerCar);
         return ResponseEntity.ok(updatedCustomerCar);
     }
 

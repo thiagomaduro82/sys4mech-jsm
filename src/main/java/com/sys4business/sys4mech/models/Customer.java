@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -36,6 +38,7 @@ public class Customer extends BaseEntity {
     @Column(name = "phone", nullable = false)
     private String phone;
     @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
     private List<CustomerCars> cars = new ArrayList<>();
 
     public Customer() {

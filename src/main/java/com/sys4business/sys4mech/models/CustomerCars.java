@@ -1,5 +1,7 @@
 package com.sys4business.sys4mech.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -26,6 +28,7 @@ public class CustomerCars extends BaseEntity {
     private String vin;
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
     public CustomerCars() {

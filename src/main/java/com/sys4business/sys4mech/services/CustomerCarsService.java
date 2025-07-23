@@ -43,6 +43,7 @@ public class CustomerCarsService {
         existingCustomerCar.setYear(customerCar.getYear());
         existingCustomerCar.setRegistrationNumber(customerCar.getRegistrationNumber());
         existingCustomerCar.setColor(customerCar.getColor());
+        existingCustomerCar.setVin(customerCar.getVin());
         existingCustomerCar.setCustomer(customerCar.getCustomer()); // Assuming customer is set correctly
         return customerCarsRepository.save(existingCustomerCar);
     }
