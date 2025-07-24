@@ -3,6 +3,7 @@ package com.sys4business.sys4mech.controllers;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,18 +31,21 @@ public class RolePermissionsController {
     }
     
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_PERMISSIONS_READ')")
     public ResponseEntity<RolePermissions> getRolePermission(@RequestParam Long roleId, @RequestParam Long permissionId) {
         RolePermissions rolePermissions = rolePermissionsService.getByRoleIdAndPermissionId(roleId, permissionId);
         return ResponseEntity.ok().body(rolePermissions);
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_PERMISSIONS_WRITE')")
     public ResponseEntity<RolePermissions> createRolePermission(@Valid @RequestBody RolePermissions rolePermissions) {
         log.info("Creating role with details: {}", rolePermissions);
         return ResponseEntity.ok().body(rolePermissionsService.create(rolePermissions));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_PERMISSIONS_DELETE')")
     public ResponseEntity<Void> deleteRolePermission(@PathVariable Long id) {
         RolePermissions rolePermissions = rolePermissionsService.getById(id);
         log.info("Deleting permission: {}", rolePermissions);

@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class RoleController {
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('ROLE_READ')")
     public ResponseEntity<Role> getRoleByUuid(@PathVariable String uuid) {
         log.info("Fetching role with UUID: {}", uuid);
         Role role = roleService.getByUuid(uuid);
@@ -47,6 +49,7 @@ public class RoleController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('ROLE_READ')")
     public ResponseEntity<List<Role>> getAllRolesList() {
         log.info("Fetching all roles as a list");
         List<Role> roles = roleService.getAllList();
@@ -54,6 +57,7 @@ public class RoleController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ROLE_READ')")
     public ResponseEntity<Page<Role>> getAllRoles(
             @RequestParam Optional<String> name,
             @RequestParam Optional<Integer> pageNumber,
@@ -90,6 +94,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_WRITE')")
     public ResponseEntity<Role> createRole(@Valid @RequestBody RoleDTO roleDTO) {
         log.info("Creating role with details: {}", roleDTO);
         Role createdRole = roleService.create(roleDTO.toRole());
@@ -98,6 +103,7 @@ public class RoleController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('ROLE_WRITE')")
     public ResponseEntity<Role> updateRole(@PathVariable String uuid, @Valid @RequestBody RoleDTO roleDTO) {
         log.info("Updating role with UUID: {} and details: {}", uuid, roleDTO);
         Role updatedRole = roleService.update(uuid, roleDTO.toRole());
@@ -105,6 +111,7 @@ public class RoleController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('ROLE_DELETE')")
     public ResponseEntity<Void> deleteRole(@PathVariable String uuid) {
         log.info("Deleting role with UUID: {}", uuid);
         roleService.deleteByUuid(uuid);

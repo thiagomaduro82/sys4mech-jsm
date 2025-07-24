@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,6 +37,7 @@ public class CustomerCarsController {
     private CustomerService customerService;
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_CARS_READ')")
     public ResponseEntity<CustomerCars> getCustomerCarByUuid(@PathVariable String uuid) {
         log.info("Fetching customer car");
         CustomerCars customerCar = customerCarsService.getByUuid(uuid);
@@ -43,6 +45,7 @@ public class CustomerCarsController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_CARS_READ')")
     public ResponseEntity<List<CustomerCars>> getAllCustomerCars() {
         log.info("Fetching all customer cars as a list");
         List<CustomerCars> customerCars = customerCarsService.findAll();
@@ -50,6 +53,7 @@ public class CustomerCarsController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_CARS_WRITE')")
     public ResponseEntity<CustomerCars> createCustomerCar(@Valid @RequestBody CustomerCarsDTO customerCarDTO) {
         log.info("Creating new customer car");
         CustomerCars createdCustomerCar = customerCarDTO.toCustomerCars();
@@ -60,6 +64,7 @@ public class CustomerCarsController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_CARS_WRITE')")
     public ResponseEntity<CustomerCars> updateCustomerCar(@PathVariable String uuid, @Valid @RequestBody CustomerCarsDTO customerCarDTO) {
         log.info("Updating customer car with UUID: {}", uuid);
         CustomerCars existingCustomerCar = customerCarDTO.toCustomerCars();
@@ -69,6 +74,7 @@ public class CustomerCarsController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_CARS_DELETE')")
     public ResponseEntity<Void> deleteCustomerCar(@PathVariable String uuid) {
         log.info("Deleting customer car with UUID: {}", uuid);
         customerCarsService.delete(uuid);

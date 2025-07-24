@@ -5,12 +5,16 @@ insert into roles (uuid, name, created_at, updated_at) values
 
 -- Permission
 insert into permissions (uuid, name, description, created_at, updated_at) values
+  (REPLACE(UUID(), '-', ''), 'HOME_VIEW', 'View the Home page', now(), now()),
   (REPLACE(UUID(), '-', ''), 'PERMISSION_READ', 'View the permissions data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'PERMISSION_WRITE', 'Write the permissions data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'PERMISSION_DELETE', 'Delete the permissions data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'ROLE_READ', 'View the roles data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'ROLE_WRITE', 'Write the roles data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'ROLE_DELETE', 'Delete the roles data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'ROLE_PERMISSIONS_READ', 'View the role permissions data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'ROLE_PERMISSIONS_WRITE', 'Write the role permissions data', now(), now()),
+  (REPLACE(UUID(), '-', ''), 'ROLE_PERMISSIONS_DELETE', 'Delete the role permissions data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'USER_READ', 'View the users data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'USER_WRITE', 'Write the users data', now(), now()),
   (REPLACE(UUID(), '-', ''), 'USER_DELETE', 'Delete the roles data', now(), now()),
@@ -41,12 +45,16 @@ insert into permissions (uuid, name, description, created_at, updated_at) values
 
 -- Role-Permission mapping
 insert into role_permissions (role_id, permission_id) values
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'HOME_VIEW')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'PERMISSION_READ')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'PERMISSION_WRITE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'PERMISSION_DELETE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_READ')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_WRITE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_DELETE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_PERMISSIONS_READ')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_PERMISSIONS_WRITE')),
+  ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'ROLE_PERMISSIONS_DELETE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'USER_READ')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'USER_WRITE')),
   ((select id from roles where name = 'ROLE_ADMIN'), (select id from permissions where name = 'USER_DELETE')),

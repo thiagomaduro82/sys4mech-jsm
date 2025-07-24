@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('EMPLOYEE_READ')")
     public ResponseEntity<Employee> getEmployeeByUuid(@PathVariable String uuid) {
         log.info("Fetching employee with UUID: {}", uuid);
         Employee employee = employeeService.findEmployeeByUuid(uuid);
@@ -47,6 +49,7 @@ public class EmployeeController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE_READ')")
     public ResponseEntity<Page<Employee>> getAllEmployees(
             @RequestParam Optional<String> name,
             @RequestParam Optional<String> email,
@@ -89,6 +92,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('EMPLOYEE_READ')")
     public ResponseEntity<List<Employee>> getAllEmployeeList() {
         log.info("Fetching all employees as a list");
         List<Employee> employees = employeeService.findAllEmployees();
@@ -96,6 +100,7 @@ public class EmployeeController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('EMPLOYEE_WRITE')")
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody EmployeeDTO employeeDTO) {
         log.info("Creating employee with details: {}", employeeDTO);
         Employee createdEmployee = employeeService.create(employeeDTO.toEmployee());
@@ -104,6 +109,7 @@ public class EmployeeController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('EMPLOYEE_WRITE')")
     public ResponseEntity<Employee> updateEmployee(@PathVariable String uuid,
             @Valid @RequestBody EmployeeDTO employeeDTO) {
         log.info("Updating employee with UUID: {} and details: {}", uuid, employeeDTO);
@@ -112,6 +118,7 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('EMPLOYEE_DELETE')")
     public ResponseEntity<Void> deleteEmployee(@PathVariable String uuid) {
         log.info("Deleting employee with UUID: {}", uuid);
         employeeService.delete(uuid);

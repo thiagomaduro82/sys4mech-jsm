@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,6 +45,7 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('USER_READ')")
     public ResponseEntity<User> getUserByUuid(@PathVariable String uuid) {
         log.info("Fetching user with UUID: {}", uuid);
         User user = userService.getByUuid(uuid);
@@ -51,6 +53,7 @@ public class UserController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('USER_READ')")
     public ResponseEntity<Page<User>> getAllUsers(
             @RequestParam Optional<String> field,
             @RequestParam Optional<String> value,
@@ -91,6 +94,7 @@ public class UserController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('USER_WRITE')")
     public ResponseEntity<User> createUser(@Valid @RequestBody UserAddDTO userAddDTO) {
         log.info("Creating user: {}", userAddDTO.getName());
         User user = userService.create(convertAddToUser(userAddDTO));
@@ -99,6 +103,7 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('USER_WRITE')")
     public ResponseEntity<User> updateUser(@PathVariable String uuid, @Valid @RequestBody UserUpdDTO userUpdDTO) {
         log.info("Updating user with UUID: {}", uuid);
         User updatedUser = convertUpdateToUser(userUpdDTO);
@@ -107,6 +112,7 @@ public class UserController {
     }
 
     @PutMapping("/{uuid}/change-password")
+    @PreAuthorize("hasAuthority('USER_WRITE')")
     public ResponseEntity<User> changePassword(@PathVariable String uuid, @Valid @RequestBody ChangePassword changePassword) {
         log.info("Changing password for user with UUID: {}", uuid);
         User user = userService.changePassword(uuid, changePassword);

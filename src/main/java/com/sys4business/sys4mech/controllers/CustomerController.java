@@ -12,6 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +41,7 @@ public class CustomerController {
     private CustomerService customerService;
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_READ')")
     public ResponseEntity<Customer> getCustomerByUuid(@PathVariable String uuid) {
         log.info("Fetching customer with UUID: {}", uuid);
         Customer customer = customerService.findCustomerByUuid(uuid);
@@ -47,6 +49,7 @@ public class CustomerController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_READ')")
     public ResponseEntity<Page<Customer>> getAllCustomers(
             @RequestParam Optional<String> name,
             @RequestParam Optional<String> email,
@@ -89,6 +92,7 @@ public class CustomerController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('CUSTOMER_READ')")
     public ResponseEntity<List<Customer>> getAllCustomerList() {
         log.info("Fetching all customers as a list");
         List<Customer> customers = customerService.findAllCustomers();
@@ -96,6 +100,7 @@ public class CustomerController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('CUSTOMER_WRITE')")
     public ResponseEntity<Customer> createCustomer(@Valid @RequestBody CustomerDTO customerDTO) {
         log.info("Creating customer with details: {}", customerDTO);
         Customer createdCustomer = customerService.create(customerDTO.toCustomer());
@@ -104,6 +109,7 @@ public class CustomerController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_WRITE')")
     public ResponseEntity<Customer> updateCustomer(@PathVariable String uuid,
             @Valid @RequestBody CustomerDTO customerDTO) {
         log.info("Updating customer with UUID: {} and details: {}", uuid, customerDTO);
@@ -112,6 +118,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('CUSTOMER_DELETE')")
     public ResponseEntity<Void> deleteCustomer(@PathVariable String uuid) {
         log.info("Deleting customer with UUID: {}", uuid);
         customerService.delete(uuid);

@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ public class PermissionController {
     }
 
     @GetMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('PERMISSION_READ')")
     public ResponseEntity<Permission> getPermissionByUuid(@PathVariable String uuid) {
         log.info("Fetching permission with UUID: {}", uuid);
         Permission permission = permissionService.getByUuid(uuid);
@@ -48,6 +50,7 @@ public class PermissionController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('PERMISSION_READ')")
     public ResponseEntity<Page<Permission>> getAllPermissions(
             @RequestParam Optional<String> field,
             @RequestParam Optional<String> value,
@@ -88,6 +91,7 @@ public class PermissionController {
     }
 
     @GetMapping("/list")
+    @PreAuthorize("hasAuthority('PERMISSION_READ')")
     public ResponseEntity<List<Permission>> getAllPermissionsList() {
         log.info("Fetching all permissions as a list");
         List<Permission> permissions = permissionService.findAllList();
@@ -95,6 +99,7 @@ public class PermissionController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('PERMISSION_WRITE')")
     public ResponseEntity<Permission> createPermission(@Valid @RequestBody PermissionDTO permissionDTO) {
         log.info("Creating permission with details: {}", permissionDTO);
         Permission createdPermission = permissionService.create(permissionDTO.toPermission());
@@ -103,6 +108,7 @@ public class PermissionController {
     }
 
     @PutMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('PERMISSION_WRITE')")
     public ResponseEntity<Permission> updatePermission(@PathVariable String uuid, @Valid @RequestBody PermissionDTO permissionDTO) {
         log.info("Updating permission with UUID: {} and details: {}", uuid, permissionDTO);
         Permission updatedPermission = permissionService.update(uuid, permissionDTO.toPermission());
@@ -110,6 +116,7 @@ public class PermissionController {
     }
 
     @DeleteMapping("/{uuid}")
+    @PreAuthorize("hasAuthority('PERMISSION_DELETE')")
     public ResponseEntity<Void> deletePermission(@PathVariable String uuid) {
         log.info("Deleting permission with UUID: {}", uuid);
         permissionService.delete(uuid);
