@@ -51,18 +51,18 @@ public class ServiceOrderController {
             @RequestParam Optional<Integer> pageSize,
             @RequestParam Optional<String> order) {
 
-        log.info("Fetching all service order with filters: description={}, pageNumber={}, pageSize={}, order={}",
+        log.info("Fetching all service order with filters: pageNumber={}, pageSize={}, order={}",
                 pageNumber.orElse(0), pageSize.orElse(10), order.orElse(""));
 
         Sort sortRequest;
         if (order.isPresent()) {
             if (order.get().equalsIgnoreCase("asc")) {
-                sortRequest = Sort.by("name").ascending();
+                sortRequest = Sort.by("id").ascending();
             } else {
-                sortRequest = Sort.by("name").descending();
+                sortRequest = Sort.by("id").descending();
             }
         } else {
-            sortRequest = Sort.by("name").ascending();
+            sortRequest = Sort.by("id").ascending();
         }
 
         // Set up pageable variable
@@ -80,15 +80,15 @@ public class ServiceOrderController {
     @PostMapping
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_WRITE')")
     public ResponseEntity<ServiceOrder> create(@Valid @RequestBody ServiceOrderDTO serviceOrderDTO) {
-        log.info("Creating new service order");
-        return ResponseEntity.ok(serviceOrderService.convertDtoToEntity(serviceOrderDTO));
+        log.info("Creating new service order: {}", serviceOrderDTO);
+        return ResponseEntity.ok(serviceOrderService.create(serviceOrderService.convertDtoToEntity(serviceOrderDTO)));
     }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_WRITE')")
     public ResponseEntity<ServiceOrder> update(@PathVariable String uuid, @Valid @RequestBody ServiceOrderDTO serviceOrderDTO) {
         log.info("Updating service order", uuid);
-        return ResponseEntity.ok(serviceOrderService.mapToUpdate(uuid, serviceOrderDTO));
+        return ResponseEntity.ok(serviceOrderService.update(serviceOrderService.mapToUpdate(uuid, serviceOrderDTO)));
     }
 
     @DeleteMapping("/{uuid}")

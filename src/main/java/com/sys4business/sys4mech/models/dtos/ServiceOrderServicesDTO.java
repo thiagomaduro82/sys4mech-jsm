@@ -23,7 +23,7 @@ public class ServiceOrderServicesDTO {
     @NotNull
     @NotBlank
     @NotEmpty
-    private String ServiceUuid;
+    private String serviceUuid;
     private Integer quantity;
     private BigDecimal amount;
 

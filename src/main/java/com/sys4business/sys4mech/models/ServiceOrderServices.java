@@ -3,6 +3,7 @@ package com.sys4business.sys4mech.models;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "service_order_parts")
+@Table(name = "service_order_services")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,11 +26,10 @@ public class ServiceOrderServices extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_order_id")
-    @JsonBackReference
+    @JsonIgnore
     private ServiceOrder serviceOrder;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "service_id")
-    @JsonBackReference
     private Service service;
     @Column(name = "quantity")
     private Integer quantity;

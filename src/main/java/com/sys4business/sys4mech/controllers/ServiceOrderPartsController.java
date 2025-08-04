@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,6 @@ import com.sys4business.sys4mech.models.ServiceOrderParts;
 import com.sys4business.sys4mech.models.dtos.ServiceOrderPartsDTO;
 import com.sys4business.sys4mech.services.ServiceOrderPartsService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
@@ -40,17 +40,17 @@ public class ServiceOrderPartsController {
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_READ')")
     public ResponseEntity<ServiceOrderParts> create(@Valid @RequestBody ServiceOrderPartsDTO serviceOrderPartsDTO) {
         log.info("Creating new service order parts");
-        return ResponseEntity.ok(serviceOrderPartsService.convertDtoToEntity(serviceOrderPartsDTO));
+        return ResponseEntity.ok(serviceOrderPartsService.create(serviceOrderPartsService.convertDtoToEntity(serviceOrderPartsDTO)));
     }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_WRITE')")
     public ResponseEntity<ServiceOrderParts> update(@PathVariable Long id, @Valid @RequestBody ServiceOrderPartsDTO serviceOrderPartsDTO) {
         log.info("Updating service order parts id: {}", id);
-        return ResponseEntity.ok(serviceOrderPartsService.mapToUpdate(id, serviceOrderPartsDTO));
+        return ResponseEntity.ok(serviceOrderPartsService.update(serviceOrderPartsService.mapToUpdate(id, serviceOrderPartsDTO)));
     }
 
-    @DeleteMapping("/{uuid}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_DELETE')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("Deleting service order parts with id: {}", id);

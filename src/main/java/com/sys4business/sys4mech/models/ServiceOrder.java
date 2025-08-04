@@ -47,10 +47,10 @@ public class ServiceOrder extends BaseEntity {
     @Column(name = "observations")
     private String observations;
     @OneToMany(mappedBy = "serviceOrder")
-    @JsonManagedReference
+    @JsonManagedReference("order-parts")
     private List<ServiceOrderParts> serviceOrderParts = new ArrayList<>();
     @OneToMany(mappedBy = "serviceOrder")
-    @JsonManagedReference
+    @JsonManagedReference("order-services")
     private List<ServiceOrderServices> serviceOrderServices = new ArrayList<>();
 
     

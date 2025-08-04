@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,6 @@ import com.sys4business.sys4mech.models.ServiceOrderServices;
 import com.sys4business.sys4mech.models.dtos.ServiceOrderServicesDTO;
 import com.sys4business.sys4mech.services.ServiceOrderServicesService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.validation.Valid;
 
 @RestController
@@ -39,18 +39,19 @@ public class ServiceOrderServicesController {
     @PostMapping
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_READ')")
     public ResponseEntity<ServiceOrderServices> create(@Valid @RequestBody ServiceOrderServicesDTO serviceOrderServicesDTO) {
-        log.info("Creating new service order services");
-        return ResponseEntity.ok(serviceOrderServicesService.convertDtoToEntity(serviceOrderServicesDTO));
+        log.info("Creating new service order services: {}, {}, {}, {}", serviceOrderServicesDTO.getServiceOrderUuid(), serviceOrderServicesDTO.getServiceUuid(), 
+        serviceOrderServicesDTO.getAmount(), serviceOrderServicesDTO.getQuantity());
+        return ResponseEntity.ok(serviceOrderServicesService.create(serviceOrderServicesService.convertDtoToEntity(serviceOrderServicesDTO)));
     }
 
     @PutMapping("/{uuid}")
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_WRITE')")
     public ResponseEntity<ServiceOrderServices> update(@PathVariable Long id, @Valid @RequestBody ServiceOrderServicesDTO serviceOrderServicesDTO) {
         log.info("Updating service order services id: {}", id);
-        return ResponseEntity.ok(serviceOrderServicesService.mapToUpdate(id, serviceOrderServicesDTO));
+        return ResponseEntity.ok(serviceOrderServicesService.update(serviceOrderServicesService.mapToUpdate(id, serviceOrderServicesDTO)));
     }
 
-    @DeleteMapping("/{uuid}")
+    @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('SERVICE_ORDERS_DELETE')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         log.info("Deleting service order services with id: {}", id);

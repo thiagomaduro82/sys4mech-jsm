@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ServiceOrderDTO {
-    
+
     @NotNull
     @NotBlank
     @NotEmpty
@@ -37,5 +37,14 @@ public class ServiceOrderDTO {
 
     private String observations;
 
-    
+    @Override
+    public String toString() {
+        return "CustomerUUID: " + this.customerUuid + "\n" +
+        "CustomerCarUUID: " + this.customerCarUuid + "\n" +
+        "employeeUUID: " + this.employeeUuid + "\n" + 
+        "Status: " + this.status + "\n" + 
+        "workRequired: " + this.workRequired + "\n" + 
+        "observations: " + this.observations + "\n";
+    }
+
 }
